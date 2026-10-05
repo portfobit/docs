@@ -1,0 +1,37 @@
+---
+title: Security
+description: Use least privilege, provider IP allowlists, and safe secret handling.
+---
+
+Portfobit supports both read access and carefully protected CEX actions. OAuth grants, provider credentials, and Open API keys require careful handling, and high-risk actions add confirmation, a separate trading OTP, idempotency, provider permission, rate limits, risk checks, and an audit trail.
+
+## Use least privilege
+
+For every CEX credential:
+
+- enable only the permissions needed for your use: read access for analysis, trading for orders, or internal-transfer permission for same-CEX account partitions;
+- always disable withdrawals, external-address transfers, P2P transfers, and address-management permissions;
+- restrict the credential to Portfobit's service egress IPs where possible; and
+- revoke or rotate it when the credential is no longer needed.
+
+## AI-first versus Web connection
+
+The AI-first connection flow is recommended because it keeps discovery, connection, and verification in one conversation. In that flow, the AI client may receive the provider credential you provide to create the connection.
+
+Choose the Portfobit Web connection flow instead if you do not want the AI client to receive that credential. The Web route still triggers the same automatic first sync.
+
+## Personal identity and MCP data
+
+Portfobit's `get_current_user_context` tool uses a strict allowlist. It returns only onboarding status, subscription features and limits, and the current authorization scopes. It does not expose your user ID, username, display name, avatar, or Telegram or Google profile, so you do not need to worry about this tool sharing your personal identity with the AI model.
+
+## Portfobit API keys
+
+Interactive OAuth-capable MCP clients should use browser authorization. Review each grant in **Agents**, select the least privilege needed, and revoke access when a client or device should no longer connect.
+
+For direct Open API access or an MCP client without OAuth, use a separate Portfobit Open API key for each integration where practical, never commit it, and revoke it from **API Keys** when it is no longer needed. Enable `activity:write` only when the integration needs bounded history imports. Enable `trade:write` or `transfer:write` only for a client you trust to follow the protected-action confirmation flow.
+
+## Protected-action boundary
+
+Never share a trading OTP in a prompt, log, source file, or reusable configuration. Provide it only after the client has shown the exact action summary and you have decided to confirm it. Portfobit uses it only for transient validation and must not store or log it.
+
+Portfobit never supports withdrawals, external transfers, cross-exchange transfers, or P2P transfers — regardless of the scopes or CEX credential permissions.

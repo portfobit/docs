@@ -1,0 +1,40 @@
+---
+title: Generic client
+description: Connect an MCP client without OAuth support by using a scoped bearer token.
+---
+
+Use this compatibility method only when your MCP client does not support Remote MCP OAuth. Your client must support a remote HTTP or Streamable HTTP server and a bearer request header.
+
+1. Create a scoped Developer API Key in **Dashboard → API Keys**. Use your client's secret storage if it supports one.
+2. If your client supports the common `mcpServers` JSON shape, paste this configuration:
+
+```json
+{
+  "mcpServers": {
+    "portfobit": {
+      "type": "http",
+      "url": "https://mcp.portfobit.com/v1/mcp",
+      "headers": {
+        "Authorization": "Bearer <PORTFOBIT_API_KEY>"
+      }
+    }
+  }
+}
+```
+
+Replace `<PORTFOBIT_API_KEY>` with the key, or use your client's documented secret-substitution syntax. The JSON example does not itself expand environment variables. Keep any configuration containing the key out of source control.
+
+3. If your client uses an **Add Server** form instead, use these connection values:
+
+```text
+Server name: portfobit
+Transport: HTTP or Streamable HTTP
+URL: https://mcp.portfobit.com/v1/mcp
+Header: Authorization
+Header value: Bearer <PORTFOBIT_API_KEY>
+```
+
+4. Do not add exchange credentials to the MCP server configuration; those are supplied only when creating an account connection.
+5. Ask: **“Use portfobit to list the account connectors I can connect.”**
+
+If your client cannot configure a remote HTTP MCP server or request headers, it is not compatible with this integration. If your client has its own config shape, prefer that client's dedicated guide or copy block on the Portfobit homepage.

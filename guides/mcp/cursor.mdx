@@ -1,0 +1,29 @@
+---
+title: Cursor
+description: Connect Portfobit to Cursor with browser-based OAuth.
+---
+
+Cursor connects to Portfobit's remote MCP server with browser-based OAuth.
+
+1. Add Portfobit to your project `.cursor/mcp.json` or global Cursor MCP configuration. Do not add an `Authorization` header:
+
+```json
+{
+  "mcpServers": {
+    "portfobit": {
+      "url": "https://mcp.portfobit.com/v1/mcp"
+    }
+  }
+}
+```
+
+2. Start the OAuth login:
+
+```bash
+cursor-agent mcp login portfobit
+```
+
+3. Sign in to Portfobit in the browser and choose the scopes you want to grant.
+4. Ask: **“Use portfobit to list the account connectors I can connect.”**
+
+If an existing `portfobit` configuration has a static `Authorization` header, remove it before logging in with OAuth.

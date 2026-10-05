@@ -1,0 +1,32 @@
+---
+title: Troubleshooting
+description: Diagnose MCP configuration, authorization, provider credentials, and sync failures.
+---
+
+## The MCP server does not appear in my client
+
+Copy the current template from Portfobit Web, confirm the client supports remote HTTP MCP servers, and start a new conversation or restart the client if it requires a reload.
+
+## The agent says authentication is required
+
+For an OAuth client, remove any old static `Authorization` header, run the client's Portfobit login command again, and approve the required scope in the browser. Connector discovery requires `account:read`. For an API key compatibility client, confirm that the key is active and has the required scope.
+
+## An account was created but cannot be used
+
+Check the automatic first sync. Account creation only records the connection and queues `on_create`; it does not validate every provider credential immediately.
+
+## The provider rejects the credential
+
+Verify that the CEX credential is active, has the permissions required for the requested operation, and permits Portfobit's current service egress IPs. For analysis, read permission is enough; trading and internal transfer require their respective CEX permissions. Withdrawals must remain disabled. Correct the CEX-side configuration, then run a manual sync if needed.
+
+## A protected action was rejected
+
+Check the relevant Open API scope (`trade:write` or `transfer:write`), active Plus or Pro entitlement, account ownership and status, CEX permission, explicit confirmation, a fresh six-digit trading OTP, and the `Idempotency-Key`. A risk or provider-capability rejection does not mean the client should retry with different parameters without your review.
+
+## Manual sync is unavailable
+
+Check that the current OAuth grant or API key has `account:write`, and whether you have reached the daily manual-sync limit of 20.
+
+## An activity-history import was rejected or failed
+
+Starting an import requires Plus or Pro, `activity:write`, the matching activity read scope, an `Idempotency-Key`, and a valid bounded UTC range. Check whether another import for the same account and activity type is already active or whether the credential's 168-unit UTC-day allowance is exhausted. A provider can also reject older ranges or rate-limit the task. A failed task does not resume automatically, but any facts written before failure remain available.

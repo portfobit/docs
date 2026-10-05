@@ -1,0 +1,33 @@
+---
+title: Codex
+description: Connect Portfobit to Codex with browser-based OAuth.
+---
+
+Codex connects to Portfobit's remote MCP server with browser-based OAuth. You do not need to create or paste an API key.
+
+## Recommended: install the plugin with a prompt
+
+Paste this into Codex:
+
+```text
+Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Codex plugin marketplace, then guide me through Portfobit browser OAuth.
+```
+
+## Manual Remote MCP setup
+
+1. Add the Portfobit MCP server:
+
+```bash
+codex mcp add portfobit --url https://mcp.portfobit.com/v1/mcp
+```
+
+2. Start the OAuth login:
+
+```bash
+codex mcp login portfobit
+```
+
+3. Sign in to Portfobit in the browser and choose the scopes you want to grant.
+4. Ask Codex: **“Use portfobit to list the account connectors I can connect.”**
+
+If an existing `portfobit` configuration has a static `Authorization` header, remove it before logging in with OAuth.

@@ -1,0 +1,47 @@
+---
+title: OpenClaw
+description: Connect Portfobit to OpenClaw with browser-based OAuth.
+---
+
+OpenClaw connects to Portfobit's Streamable HTTP MCP server with browser-based OAuth.
+
+## Local interactive install: OAuth
+
+1. Add Portfobit with OAuth authentication:
+
+```bash
+openclaw mcp set portfobit '{"url":"https://mcp.portfobit.com/v1/mcp","transport":"streamable-http","auth":"oauth"}'
+```
+
+2. Start the OAuth login:
+
+```bash
+openclaw mcp login portfobit
+```
+
+3. Sign in to Portfobit in the browser and choose the scopes you want to grant.
+4. Ask: **“Use portfobit to list the account connectors I can connect.”**
+
+If an existing configuration has a static bearer header, remove it before logging in with OAuth.
+
+## Remote or headless server: Bearer
+
+When OpenClaw runs on a VPS, in a container, or without an interactive browser, configure a dedicated least-privilege Developer API Key instead:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "portfobit": {
+        "url": "https://mcp.portfobit.com/v1/mcp",
+        "transport": "streamable-http",
+        "headers": {
+          "Authorization": "Bearer <PORTFOBIT_API_KEY>"
+        }
+      }
+    }
+  }
+}
+```
+
+Replace `<PORTFOBIT_API_KEY>` at deployment time. Keep the completed configuration out of source control and logs, and revoke the key from **Dashboard → API Keys** when the server is retired.

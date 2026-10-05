@@ -1,0 +1,39 @@
+---
+title: Use Portfobit with AI
+description: Ask useful portfolio questions after your accounts are synchronized.
+---
+
+After an account has completed its first sync, your agent can retrieve portfolio data through Portfobit MCP.
+
+## Example prompts
+
+### Analysis and data
+
+- “Use portfobit to show me what I can do with the Portfobit MCP server.”
+- “List my Portfobit accounts and show which ones need attention.”
+- “Summarize the current value, balances, and largest positions in my global portfolio.”
+- “Compare my BTC and ETH exposure across all connected accounts.”
+- “Show positions with the largest unrealized P&L.”
+- “Filter my accounts by tag and summarize the matching exposure.”
+- “Show my BTC/USDT fills from the last 7 days and explain the collection coverage.”
+- “Import my BTC/USDT fills for a bounded older date range, then summarize the result.”
+- “Fetch a Binance BTC/USDT quote from one of my connected accounts.”
+
+### Protected actions
+
+- “Prepare a limit order to buy 0.01 BTC with USDT on my Binance account at 5% below the current market price. Show me the exact order summary and risk checks before asking for confirmation.”
+- “Review my open BTC/USDT order and prepare an amendment that changes only its limit price. Do not submit it until I confirm the final summary.”
+- “Show my open ETH/USDT orders, then prepare to cancel the one I select. Ask for confirmation only after showing the exact order.”
+- “Prepare an internal transfer of 100 USDT from Spot to Futures within my Binance account. Verify that it stays inside the same CEX and show the final summary before asking for confirmation.”
+
+Do not include a trading OTP in the initial prompt. Provide a current OTP only after the agent displays the exact action summary and asks you to confirm that specific operation.
+
+## Ask for freshness explicitly
+
+For a time-sensitive question, ask the agent to show the data timestamp and to explain whether a manual sync is appropriate. The agent should respect the daily manual-sync limit rather than repeatedly refreshing accounts.
+
+## Protected actions
+
+The agent can prepare and submit a CEX order, cancel or amend an order, or start an internal transfer only when you deliberately enable the relevant write scope and a Plus or Pro entitlement. Before it acts, it must show you the exact operation summary and receive your explicit confirmation and current trading OTP; the request must also carry an `Idempotency-Key` and pass provider-permission and risk checks.
+
+The agent cannot withdraw assets, send to an external address, make a cross-exchange transfer, make a P2P transfer, or change CEX-side trading settings through Portfobit.

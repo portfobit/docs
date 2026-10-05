@@ -1,0 +1,54 @@
+---
+title: Get Started
+description: Connect Portfobit to an AI agent and analyze your first portfolio.
+---
+
+Portfobit is an AI-native workspace for crypto CEX portfolios. It connects supported crypto exchanges, normalizes portfolio data, and lets an AI agent analyze balances, positions, value, risk, activity history, and market data.
+
+## Before you begin
+
+- You need a Portfobit account.
+- For a CEX connection, use the smallest provider permission set that fits your intended use. Read access is enough for analysis; trading or internal-transfer permission is needed only if you deliberately enable Portfobit's protected actions. Always disable withdrawals.
+- If the provider supports it, add Portfobit's service egress IPs to the provider allowlist before connecting the account.
+
+New accounts include a one-calendar-month Plus trial. Review [Plans, Features, and Limits](/guides/plans-and-limits) for account capacity, synchronization quotas, and Plus/Pro history capabilities.
+
+<Note>
+Portfobit never supports withdrawals, external-address transfers, cross-exchange transfers, or P2P transfers. Trading and same-CEX internal transfers are protected actions that require an explicit scope, user confirmation, a trading OTP, an idempotency key, provider permission, and server-side risk checks.
+</Note>
+
+## Recommended path
+
+<Steps>
+  <Step title="Connect your AI agent">
+    Follow [Plugin or MCP Server Setup](/guides/mcp-server-setup) for your preferred agent or MCP client.
+    Codex and Claude Code show the plugin installation prompt first; the existing
+    manual Remote MCP setup remains available.
+    Sign in to Portfobit in the browser, review the requested OAuth scopes, and approve
+    only the access the agent needs.
+  </Step>
+
+  <Step title="Connect your first CEX account">
+    Follow [Connect Your First Account](/guides/connect-your-first-account) and let the
+    connected agent create the account connection. Keep provider permissions minimal
+    and leave withdrawals disabled.
+  </Step>
+
+  <Step title="Verify the first sync">
+    Wait for the automatic `on_create` sync to complete, then ask the agent to check the
+    account status and retrieve a portfolio summary. See [Sync and Data
+    Freshness](/guides/sync-and-data-freshness) if the account is not ready yet.
+  </Step>
+
+  <Step title="Use Portfobit with AI">
+    Continue with [Use Portfobit with AI](/guides/use-portfobit-with-ai) for practical
+    prompts that analyze your portfolio, inspect activity, and safely prepare protected
+    CEX actions.
+  </Step>
+</Steps>
+
+<Note>
+You do not need a Developer API key for the recommended OAuth path. Create one only for
+direct Open API access, automation, service accounts, or an MCP client without OAuth
+support. See [Create a Developer API Key](/guides/create-api-key).
+</Note>

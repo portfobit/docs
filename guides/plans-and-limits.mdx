@@ -1,0 +1,105 @@
+---
+title: Plans, Features, and Limits
+description: Compare Free and Plus, understand current quotas, and see which capabilities are not available yet.
+---
+
+Portfobit currently offers Free and Plus. Every new account starts with a one-calendar-month Plus trial, then moves to Free unless the Plus period has been extended.
+
+<Note>
+A subscription controls product capacity and feature access. It does not replace OAuth or API-key scopes, resource ownership, provider permissions, explicit confirmation, trading OTP, idempotency, or risk checks.
+</Note>
+
+## Plan availability
+
+| Plan | Availability | How access works |
+| --- | --- | --- |
+| Free | Available | Becomes active after the Plus trial or extension ends. |
+| Plus | Available | New users receive a free one-calendar-month Plus trial upon registration. Each qualifying contribution approved through **Marketing Plan** can extend Plus by one to three calendar months. |
+| Pro | Coming later | Not currently available. Features, limits, pricing, and launch timing have not been announced. |
+
+Portfobit does not currently offer self-service checkout, recurring billing, or plan purchase. You can participate in **Marketing Plan** more than once. Each submission is reviewed independently, and each qualifying contribution can earn a new one-to-three-month Plus extension; a submission may be rejected or receive no extension.
+
+## Feature comparison
+
+| Capability | Free | Plus |
+| --- | --- | --- |
+| Connected CEX accounts | Up to 3 | Up to 20 |
+| Custom portfolios | Up to 3 | Up to 10 |
+| Global portfolio | Included and does not use a custom-portfolio slot | Included and does not use a custom-portfolio slot |
+| Remote MCP OAuth and Developer API keys | Included | Included |
+| Current balances, positions, value, exposure, and risk | Included | Included |
+| Current quotes and bounded OHLCV market data | Included | Included |
+| Automatic first sync and manual sync | Included | Included |
+| Scheduled base sync | At most once every 24 hours per account | At most once every 8 hours per account |
+| Manual sync allowance | 20 account runs per UTC day | 20 account runs per UTC day |
+| Orders, trades, ledger, and funding history | Not included | Included |
+| Continuous activity-history collection | Not included | Included |
+| Explicit bounded activity-history imports | Not included | Included |
+| Daily account and portfolio valuation history | Not included | Included |
+| Protected CEX orders and same-CEX internal transfers | Not included | Included, with additional authorization and safety checks |
+
+The account and portfolio limits count active, non-deleted resources. The built-in global portfolio does not count toward the custom-portfolio limit.
+
+## Synchronization limits
+
+Creating an account queues an automatic `on_create` sync. Scheduled syncs then refresh base account data at the plan cadence shown above. The cadence controls when work can be queued; it is not a completion-time guarantee. Missed scheduled runs are not replayed later.
+
+Manual synchronization uses one shared allowance of **20 account runs per user per UTC day**, on both Free and Plus:
+
+- syncing one account consumes one run;
+- an all-account refresh consumes one run for every account it would refresh;
+- an all-account refresh is rejected before any work is queued if the remaining allowance is too small; and
+- automatic first syncs and scheduled syncs do not consume the manual allowance.
+
+Provider rate limits, credential permissions, an IP allowlist, maintenance, and queue load can still delay or prevent a sync. See [Sync and Data Freshness](/guides/sync-and-data-freshness) for operational guidance.
+
+## Activity history and imports
+
+An effective Plus or Pro entitlement continuously collects recent orders, fills, ledger entries, and deposit or withdrawal records on a best-effort basis. The rolling collection window is currently **7 days**, and each activity type is normally checked no more than once every 12 hours. Provider coverage and availability vary, so collection status is not a guarantee of a complete exchange audit history.
+
+Reading activity history uses Portfobit's stored facts and does not contact the CEX during the read request. To request an older or missing bounded range, a Plus or Pro integration can start an explicit history import with `activity:write` and the corresponding read scope:
+
+| Activity type | Required read scope |
+| --- | --- |
+| Order history | `order:read` |
+| Trades | `trade:read` |
+| Ledger | `ledger:read` |
+| Deposits and withdrawals | `funding:read` |
+
+Current import limits are:
+
+- the hard request ceiling is 90 days, but the lower daily work allowance normally limits one accepted request to no more than 7 days;
+- each user and CEX credential has 168 import work units per UTC day, with requested duration rounded up to full hours;
+- a seven-day request uses the full daily allowance;
+- only one import for the same account and activity type can run at a time;
+- tasks have a 15-minute execution deadline and do not automatically retry, resume, or checkpoint; and
+- accepted work counts against the daily allowance even if the provider later fails, while successfully written partial facts remain available.
+
+A provider can impose a shorter range or stricter rate limit. Imports do not create historical valuation snapshots, and Portfobit does not offer an unbounded “import everything” operation.
+
+## Daily valuation history
+
+An effective Plus or Pro entitlement can capture one account and portfolio valuation snapshot for each UTC day. Capture is scheduled during the `00:00–02:00 UTC` window and uses sufficiently fresh synchronized facts. Missing credentials, stale inputs, unavailable prices, or a failed job can leave a gap.
+
+Missed days are not backfilled or reconstructed later. Valuation history records point-in-time value and risk; it is not a performance-return or realized-P&L calculation.
+
+## Protected actions
+
+An effective Plus or Pro entitlement makes protected CEX actions eligible, but never authorizes them by itself. An order, cancellation, native amendment, or same-CEX internal transfer also requires the relevant write scope, an exact action summary, explicit user confirmation, a current trading OTP, an `Idempotency-Key`, ownership, provider permission and support, and a passing server-side risk check.
+
+Portfobit never supports withdrawals, external-address transfers, cross-exchange transfers, or P2P transfers.
+
+## When Plus ends
+
+Portfobit retains your resources, encrypted credentials, API keys, OAuth grants, audit records, and previously collected history. It does not silently delete them.
+
+The oldest three connected accounts and oldest three custom portfolios remain available on Free. Resources above those limits become unavailable for reads, aggregation, and protected actions until capacity is restored. Their scheduled base sync can continue at the Free cadence. Losing an effective Plus or Pro entitlement also stops paid-plan continuous activity collection and daily valuation snapshots.
+
+Deleting an available resource does not automatically promote an older unavailable resource. You can use the newly freed Free slot for a new resource. If Plus becomes active again, plan-limited resources become available again.
+
+## Not available yet
+
+- Pro is announced as a future plan, but its features, limits, pricing, and release date are not defined.
+- Real-time CEX account-event or WebSocket synchronization is planned, but is not part of the current synchronization service. Current automatic refresh uses scheduled syncs.
+
+For setup guidance, continue with [Get Started](/guides/get-started). For API authorization boundaries, see [Authentication and scopes](/api-reference/authentication-and-scopes).

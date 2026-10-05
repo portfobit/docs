@@ -1,0 +1,41 @@
+---
+title: Create a Developer API Key
+description: Create a scoped Developer API key for direct API access and compatibility clients.
+---
+
+Interactive MCP clients such as Codex and Claude Code use OAuth and do not need an API key. Create a Developer API key for direct Open API access, CI, scripts, service accounts, or an MCP client that does not support OAuth.
+
+1. Sign in to Portfobit Web.
+2. Open **API Keys** and select **Create API Key**.
+3. Give the key a recognizable name for the integration or service account.
+4. Select only the scopes the integration needs. Enable `activity:write`, `trade:write`, or `transfer:write` only when the integration deliberately needs that write capability.
+5. Copy the secret when it is shown and store it in the client configuration. It is not a value to paste into prompts or source control.
+
+## Current scopes
+
+| Scope | Allows |
+| --- | --- |
+| `account:read` | Read accounts, balances, positions, summaries, connectors, and sync status. |
+| `account:write` | Create account connections, replace Account tags, and start account syncs. Account name changes and account deletion stay in Portfobit Web. |
+| `portfolio:read` | Read portfolio definitions and portfolio aggregations. |
+| `portfolio:write` | Create, update, delete, and manage portfolio membership. |
+| `order:read` | Read live open orders and terminal order history. |
+| `trade:read` | Read fills and execution history. |
+| `ledger:read` | Read ledger entries, including fees, rebates, funding, and internal movements. |
+| `funding:read` | Read masked CEX deposit and withdrawal history; it never authorizes a withdrawal. |
+| `marketdata:read` | Read quotes and bounded OHLCV from a connected CEX. |
+| `activity:write` | Start a bounded Plus or Pro activity-history import. It cannot place orders or move assets. |
+| `trade:write` | Place, cancel, bulk-cancel, and natively amend orders through the protected-action flow. |
+| `transfer:write` | Initiate an internal transfer within the same CEX account through the protected-action flow. |
+
+## Scope recommendation
+
+New keys enable the nine core/read scopes by default: `account:read`, `account:write`, `portfolio:read`, `portfolio:write`, `order:read`, `trade:read`, `ledger:read`, `funding:read`, and `marketdata:read`.
+
+Keep all three write scopes disabled unless they are needed. `activity:write` also requires Plus or Pro and the matching activity read scope. `trade:write` and `transfer:write` alone are not enough to execute anything: each protected action also requires an explicit confirmation, current trading OTP, `Idempotency-Key`, supported CEX provider permission, subscription entitlement, and a passing risk check.
+
+For a direct OpenAPI integration, choose only the scopes required by the endpoints it calls. See [Authentication and scopes](/api-reference/authentication-and-scopes) for the endpoint-level model.
+
+## Keep the two kinds of credentials separate
+
+The Portfobit Open API key authorizes direct Open API calls and compatible MCP clients. It is different from both an OAuth grant and the CEX credential supplied when an account is connected. See [Security](/guides/security) before sharing any secret with a client.

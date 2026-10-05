@@ -1,0 +1,105 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "theme": "mint",
+  "name": "Portfobit Docs",
+  "description": "AI-native workspace for crypto portfolios.",
+  "colors": {
+    "primary": "#3B82F6",
+    "light": "#60A5FA",
+    "dark": "#1D4ED8"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              "guides/get-started"
+            ]
+          },
+          {
+            "group": "Plugin or MCP Server Setup",
+            "pages": [
+              "guides/mcp-server-setup",
+              "guides/mcp/codex",
+              "guides/mcp/claude-code",
+              "guides/mcp/cursor",
+              "guides/mcp/openclaw",
+              "guides/mcp/hermes",
+              "guides/mcp/generic-client"
+            ]
+          },
+          {
+            "group": "MCP compatibility notes",
+            "pages": [
+              "guides/mcp/claude-desktop"
+            ]
+          },
+          {
+            "group": "Plans and limits",
+            "pages": [
+              "guides/plans-and-limits"
+            ]
+          },
+          {
+            "group": "Connect and operate",
+            "pages": [
+              "guides/connect-your-first-account",
+              "guides/sync-and-data-freshness",
+              "guides/use-portfobit-with-ai",
+              "guides/security"
+            ]
+          },
+          {
+            "group": "Help",
+            "pages": [
+              "guides/troubleshooting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "icon": "square-terminal",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/overview",
+              "api-reference/authentication-and-scopes",
+              "guides/create-api-key",
+              "api-reference/api-conventions"
+            ]
+          },
+          {
+            "group": "REST API",
+            "openapi": "openapi/portfobit-openapi.yaml"
+          }
+        ]
+      }
+    ]
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "grok",
+      "aistudio",
+      "mcp",
+      "add-mcp",
+      "cursor",
+      "vscode",
+      "download-spec"
+    ]
+  },
+  "footerSocials": {
+    "github": "https://github.com/portfobit"
+  }
+}

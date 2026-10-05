@@ -1,0 +1,82 @@
+---
+title: API conventions
+description: Understand Portfobit response envelopes, decimal values, pagination, and safe mutation retries.
+---
+
+## Response envelopes
+
+Successful responses use `data` with optional `meta`. Failed responses use `error` with `meta`.
+
+```json
+{
+  "data": {},
+  "meta": {
+    "request_id": "req_..."
+  }
+}
+```
+
+```json
+{
+  "error": {
+    "code": "invalid_request",
+    "message": "A user-safe explanation.",
+    "details": {}
+  },
+  "meta": {
+    "request_id": "req_..."
+  }
+}
+```
+
+## Financial values and time
+
+Financial values are decimal strings, never JSON numbers. Timestamps are RFC 3339 strings. Preserve decimal strings in your application instead of converting them through binary floating-point values.
+
+## Pagination
+
+Current-state lists use offset pagination:
+
+```text
+?limit=50&offset=0
+```
+
+Their `meta` object contains `total`, `limit`, `offset`, and `has_next`. Time-series and append-only resources — valuation history, order history, trades, ledger entries, and transactions — use cursor pagination:
+
+```text
+?limit=50&cursor=<next_cursor>
+```
+
+Cursor metadata contains `limit`, `next_cursor`, and `has_next`. The first page omits `cursor`.
+
+For example, this request retrieves the second page of a 103-account result set:
+
+```text
+GET /api/v1/accounts?limit=50&offset=50
+```
+
+```json
+{
+  "data": ["... 50 account records ..."],
+  "meta": {
+    "total": 103,
+    "limit": 50,
+    "offset": 50,
+    "has_next": true,
+    "request_id": "req_01J2K8B7QW",
+    "generated_at": "2026-08-28T08:00:00Z"
+  }
+}
+```
+
+## Idempotency
+
+For account creation, Portfolio writes, manual synchronization, explicit activity-history imports, and all protected actions, send an `Idempotency-Key` header with a unique 1–255 character opaque value. Reuse the same value only when retrying the same logical request; reusing it for a different body is rejected with `409 idempotency_conflict`. The service keeps idempotency records for at least 24 hours, keyed by user, method, and path.
+
+## Risk and protected actions
+
+Risk-specific fields are grouped in a `risk` object. Its `status` is `available`, `partial`, `unavailable`, or `not_applicable`; `level` is `low`, `medium`, `high`, `critical`, or `unknown`. `not_applicable` means no specialized risk assessment applies to that object or action; it does not mean low risk. Risk facts include the assessment time, reasons, and applicable metrics such as exposure, margin utilization, leverage, concentration, or distance to liquidation.
+
+Order and internal-transfer endpoints require an explicit user-confirmed request, a current six-digit Google Authenticator `otp_code`, and an `Idempotency-Key`. OTP values are used only for transient validation and must never be logged or persisted. The server independently verifies subscription, account ownership, CEX permissions, rate limits, and risk. It can reject the request with `trading_otp_required`, `trading_otp_invalid`, `provider_permission_denied`, or `risk_blocked`.
+
+An accepted protected action can still fail at the connector or CEX. In that case the endpoint normally returns HTTP `200` with `data.status: "failed"`, a stable `data.failure_code`, and a safe `data.failure_message`. Parameter, OTP, subscription, known capability, permission, and risk failures that prevent acceptance continue to use the documented `4xx` error envelope.

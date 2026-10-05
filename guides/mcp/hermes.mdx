@@ -1,0 +1,45 @@
+---
+title: Hermes
+description: Connect Portfobit to Hermes with browser-based OAuth.
+---
+
+Hermes connects to Portfobit's HTTP MCP server with browser-based OAuth.
+
+## Local interactive install: OAuth
+
+1. Add Portfobit with OAuth authentication:
+
+```bash
+hermes mcp add --url https://mcp.portfobit.com/v1/mcp --auth oauth portfobit
+```
+
+2. Start the OAuth login:
+
+```bash
+hermes mcp login portfobit
+```
+
+3. Sign in to Portfobit in the browser and choose the scopes you want to grant.
+4. Ask: **“Use portfobit to list the account connectors I can connect.”**
+
+If an existing `mcp_servers.portfobit` entry has a static bearer header, remove it before logging in with OAuth.
+
+## Remote or headless gateway: Bearer
+
+When Hermes runs on a VPS, in a container, or without an interactive browser, keep a dedicated least-privilege Developer API Key in the process environment or `~/.hermes/.env`:
+
+```bash
+PORTFOBIT_API_KEY=<PORTFOBIT_API_KEY>
+```
+
+Then reference it from `~/.hermes/config.yaml`:
+
+```yaml
+mcp_servers:
+  portfobit:
+    url: "https://mcp.portfobit.com/v1/mcp"
+    headers:
+      Authorization: "Bearer ${PORTFOBIT_API_KEY}"
+```
+
+Here `${PORTFOBIT_API_KEY}` is a Hermes environment-variable reference, unlike the `<PORTFOBIT_API_KEY>` replacement placeholder in the generic JSON example. Store only the raw key in `PORTFOBIT_API_KEY`; the YAML adds the `Bearer` prefix. Keep both files out of source control and revoke the key from **Dashboard → API Keys** when the gateway is retired.

@@ -1,0 +1,83 @@
+---
+title: Plugin or MCP Server Setup
+description: Install the Portfobit plugin or connect the MCP server to your AI agent.
+---
+
+Portfobit uses a remote Model Context Protocol (MCP) server. Codex, Claude Code, Cursor, OpenClaw, and Hermes connect with browser-based OAuth, so you do not need to create or paste an API key first.
+
+<Note>
+During OAuth authorization, review the requested scopes and keep write scopes off unless they are needed. `activity:write` starts bounded history imports; `trade:write` and `transfer:write` authorize protected actions subject to additional safeguards. Direct OpenAPI integrations should use only the scopes their endpoints require.
+</Note>
+
+## Choose a setup method
+
+Start from **Plugin or MCP Server Setup** on the Portfobit homepage. Codex and Claude Code offer plugin installation first; the manual MCP options support other clients and deployment environments.
+
+## Recommended for Codex and Claude Code: ask your agent to install the plugin
+
+Paste this into Codex or Claude Code, replacing the client name with the one you use:
+
+```text
+Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Codex plugin marketplace, then guide me through Portfobit browser OAuth.
+```
+
+For Claude Code, say `Claude Code plugin marketplace` in place of `Codex plugin marketplace`. The homepage's client tab provides the exact prompt for each agent. The existing manual Remote MCP method remains below.
+
+## Manual Remote MCP setup with OAuth
+
+Choose your client tab on the Portfobit homepage. Add the MCP URL without an `Authorization` header, run the login command, and choose the scopes you want to grant.
+
+For Codex:
+
+```bash
+codex mcp add portfobit --url https://mcp.portfobit.com/v1/mcp
+codex mcp login portfobit
+```
+
+The other verified clients use the same browser authorization flow. OpenClaw and Hermes also have a Bearer fallback for remote or headless deployments where the loopback callback cannot reach the running Agent.
+
+| Client | Add or configure | Sign in |
+| --- | --- | --- |
+| Claude Code | `claude mcp add --scope user --transport http portfobit https://mcp.portfobit.com/v1/mcp` | `claude mcp login portfobit` |
+| Cursor | Add the URL in `mcp.json` | `cursor-agent mcp login portfobit` |
+| OpenClaw | `openclaw mcp set portfobit '{"url":"https://mcp.portfobit.com/v1/mcp","transport":"streamable-http","auth":"oauth"}'` | `openclaw mcp login portfobit` |
+| Hermes | `hermes mcp add --url https://mcp.portfobit.com/v1/mcp --auth oauth portfobit` | `hermes mcp login portfobit` |
+
+Do not add a static `Authorization` header to an OAuth connection; clients commonly prioritize that header instead of starting OAuth.
+
+<Warning>
+For OpenClaw or Hermes on a VPS, container, or unattended gateway, use the dedicated guide's **Headless / Bearer** configuration. Give that deployment its own least-privilege Developer API Key so it can be revoked independently. Do not expose the key in shell history, source control, logs, or chat.
+</Warning>
+
+## API key compatibility
+
+Developer API keys remain available for direct Open API integrations, CI, scripts, service accounts, and MCP clients that do not support OAuth. For clients that support the common `mcpServers` JSON shape, use:
+
+```json
+{
+  "mcpServers": {
+    "portfobit": {
+      "type": "http",
+      "url": "https://mcp.portfobit.com/v1/mcp",
+      "headers": {
+        "Authorization": "Bearer <PORTFOBIT_API_KEY>"
+      }
+    }
+  }
+}
+```
+
+`<PORTFOBIT_API_KEY>` is a placeholder to replace with a scoped Developer API Key, not an environment-variable reference. If your client supports secret substitution, use its own syntax instead. Never commit a configuration containing the key, paste the secret into a chat prompt, or use a CEX credential here.
+
+## Setup guides
+
+- [Codex](/guides/mcp/codex)
+- [Claude Code](/guides/mcp/claude-code)
+- [Cursor](/guides/mcp/cursor)
+- [OpenClaw](/guides/mcp/openclaw)
+- [Hermes](/guides/mcp/hermes)
+- [Generic client](/guides/mcp/generic-client)
+
+For unverified Claude Desktop interoperability, see the separate [Claude Desktop note](/guides/mcp/claude-desktop).
+
+After setup, ask your agent: **“Use portfobit to list the account connectors I can connect.”** A successful response proves the MCP server can authenticate and reach Portfobit.

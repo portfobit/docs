@@ -1,0 +1,34 @@
+---
+title: Claude Code
+description: Connect Portfobit to Claude Code with browser-based OAuth.
+---
+
+Claude Code connects to Portfobit's HTTP MCP server with browser-based OAuth.
+
+## Recommended: install the plugin with a prompt
+
+Paste this into Claude Code:
+
+```text
+Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Claude Code plugin marketplace, then guide me through Portfobit browser OAuth.
+```
+
+## Manual Remote MCP setup
+
+1. In a terminal, add the remote server:
+
+```bash
+claude mcp add --scope user --transport http portfobit https://mcp.portfobit.com/v1/mcp
+```
+
+2. Start the OAuth login:
+
+```bash
+claude mcp login portfobit
+```
+
+3. Sign in to Portfobit in the browser and choose the scopes you want to grant.
+4. Run `claude mcp list` to confirm that `portfobit` is registered.
+5. Ask: **“Use portfobit to list the account connectors I can connect.”**
+
+If an existing configuration has a static `Authorization` header, remove it before logging in with OAuth.

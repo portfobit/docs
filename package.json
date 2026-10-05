@@ -1,0 +1,12 @@
+{
+  "name": "portfobit-docs",
+  "private": true,
+  "scripts": {
+    "dev": "npx --yes mint@latest dev",
+    "dev:no-open": "npx --yes mint@latest dev --no-open",
+    "validate": "npx --yes mint@latest validate"
+  },
+  "engines": {
+    "node": ">=20.17.0"
+  }
+}

@@ -1,0 +1,42 @@
+---
+title: Connect Your First Account
+description: Use your AI agent to add a crypto CEX account.
+---
+
+The recommended path is to let the connected AI agent create the account connection through MCP. Portfobit will automatically enqueue the first `on_create` synchronization after creation.
+
+## Add the Portfobit IP allowlist first
+
+Before creating the provider API credential, ask the agent:
+
+> **Use portfobit to list the current service egress IPs for my provider IP allowlist.**
+
+Copy every returned active IP address into the CEX API-key IP allowlist. Do this before creating or enabling the credential whenever the CEX supports an IP allowlist. It restricts provider API access to Portfobit's service network and prevents a common first-sync failure.
+
+<Note>
+Use the current IPs returned by the agent, not a copied list from a document or an old conversation. Portfobit can rotate egress IPs; use the same check whenever you create a new provider credential or update its allowlist.
+</Note>
+
+## Prepare the provider credential
+
+1. Ask the agent to list supported account connectors and choose one.
+2. In the CEX, create an API credential and add the current Portfobit egress IPs to its allowlist.
+3. For analysis, enable only read permission. Enable trading or internal-transfer permission only when you deliberately plan to use the protected-action flow; always disable withdrawals and any external-transfer permission.
+
+## Ask the AI agent to connect the account
+
+Give the agent a direct instruction, for example:
+
+> List Portfobit account connectors, then help me add my Binance account named `Long-term`. I need read-only analysis access. Tell me which credential fields are required before I provide them.
+
+The agent should discover the connector first, collect only the provider-required fields, create the connection, and report the returned synchronization reference.
+
+## Confirm the first sync
+
+Creation queues an `on_create` sync; it does not prove that the provider accepted the credentials. Ask the agent to check the returned sync status and account status. A successful result should show that Portfobit can retrieve the account snapshot.
+
+If the first sync fails, correct the provider credential or IP allowlist and retry after reviewing [Troubleshooting](/guides/troubleshooting).
+
+## Alternative: connect in Portfobit Web
+
+You can add the same account from Portfobit Web. This is the better option when you do not want an AI client to receive the provider credential. Web account creation also automatically starts an `on_create` sync.

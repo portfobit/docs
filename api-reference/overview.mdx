@@ -1,0 +1,36 @@
+---
+title: Overview
+description: Build integrations with the Portfobit public REST API.
+---
+
+The Portfobit Open API is for direct API clients, CI, scripts, service accounts, third-party agents, and developer integrations that work with crypto CEX portfolios.
+
+## Base URL
+
+Use the production base URL for all REST API requests:
+
+```text
+https://api.portfobit.com/api/v1
+```
+
+Endpoint paths in this reference are relative to the `/api/v1` base path. For example, `GET /accounts` resolves to `GET https://api.portfobit.com/api/v1/accounts`.
+
+Use a scoped Portfobit Open API key to authenticate requests. See [Authentication and scopes](/api-reference/authentication-and-scopes).
+
+Remote MCP uses its own OAuth resource. An MCP OAuth access token is not a public REST API credential and is rejected when sent directly to `/api/v1/*`.
+
+## Current capabilities
+
+- discover supported CEX connectors and service egress IPs;
+- connect and synchronize crypto CEX accounts, then read balances, positions, summaries, valuation history, and activity history;
+- request a bounded import when older or missing CEX activity history is needed;
+- manage portfolios and inspect their aggregated risk;
+- retrieve market quotes and bounded OHLCV candles from a connected CEX;
+- submit a support problem; and
+- with the explicitly enabled scopes, user confirmation, an `Idempotency-Key`, and a current trading OTP, place, cancel, or amend CEX orders and initiate an internal transfer within the same CEX account.
+
+The API never supports withdrawals, transfers to an external address, cross-exchange transfers, P2P transfers, or raw exchange-parameter passthrough. It does not provide a WebSocket API.
+
+<Note>
+Valuation history, activity history, explicit activity imports, and protected actions require an active Plus or Pro subscription. Valuation history contains daily NAV snapshots, not performance P&L or returns. See [Plans, Features, and Limits](/guides/plans-and-limits) for current quotas and retention behavior. The actual endpoint remains the authority for subscription, resource-ownership, provider-permission, OTP, and risk checks.
+</Note>

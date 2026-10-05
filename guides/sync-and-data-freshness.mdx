@@ -1,0 +1,43 @@
+---
+title: Sync and Data Freshness
+description: Understand automatic first syncs, manual refreshes, and sync limits.
+---
+
+Portfobit synchronizes an account after it is created and records a synchronization result. The result is the source of truth for whether a provider credential and IP allowlist actually work.
+
+## Automatic first sync
+
+Both supported connection paths queue an `on_create` sync automatically:
+
+- an AI agent creates an account connection through MCP; or
+- you create the account connection in Portfobit Web.
+
+Wait for the sync result before treating the account as ready. A created account can still have invalid, expired, or insufficient provider credentials.
+
+## Manual sync
+
+You can ask an authorized AI agent to refresh an account, or use the manual sync action in Portfobit Web. Manual synchronization is useful after changing a credential, adjusting an IP allowlist, or when you need a fresh snapshot before analysis.
+
+## Scheduled sync
+
+Portfobit also queues periodic base-data synchronization for eligible accounts:
+
+- Free: at most once every 24 hours per account.
+- Plus: at most once every 8 hours per account.
+
+This cadence controls queueing, not guaranteed completion time. A missed scheduled run is not replayed later. Scheduled sync does not consume the manual allowance.
+
+## Manual daily limit
+
+Free and Plus each include **20 manual account runs per user per UTC day**. Syncing one account consumes one run. An all-account refresh consumes one run per account and is rejected before any work is queued if the remaining allowance cannot cover the whole request.
+
+Automatic first syncs and scheduled syncs do not consume this allowance. See [Plans, Features, and Limits](/guides/plans-and-limits) for Plus/Pro history collection, explicit imports, and valuation history.
+
+## What to check
+
+After a sync, check:
+
+- the sync status and any safe, user-facing error message;
+- the account's latest successful sync time;
+- whether balances, positions, and summary data are available; and
+- whether the provider reports an allowlist or permission error.

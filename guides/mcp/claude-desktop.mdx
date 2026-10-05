@@ -1,0 +1,18 @@
+---
+title: Claude Desktop
+description: Current Portfobit MCP interoperability guidance for Claude Desktop.
+---
+
+Portfobit supports browser-based OAuth for remote MCP clients. Direct Claude Desktop interoperability is not part of the currently verified setup template.
+
+## What to use now
+
+Use [Claude Code](/guides/mcp/claude-code) for the verified Claude integration. It adds the remote MCP URL and signs in through Portfobit's OAuth flow without copying an API key.
+
+If your Claude Desktop release can add a custom remote OAuth MCP server, use this URL:
+
+```text
+https://mcp.portfobit.com/v1/mcp
+```
+
+Do not add a static `Authorization` header to an OAuth connection.

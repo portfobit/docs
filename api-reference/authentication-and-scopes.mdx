@@ -1,0 +1,41 @@
+---
+title: Authentication and scopes
+description: Authenticate public REST requests with a scoped Portfobit Open API key.
+---
+
+Send a Portfobit Open API key as a bearer token:
+
+```http
+Authorization: Bearer <PORTFOBIT_API_KEY>
+```
+
+The public REST API accepts Portfobit Open API keys. OAuth access tokens issued for the Portfobit MCP resource cannot be used directly with `/api/v1/*`; doing so returns `401 authentication_required`. The MCP service uses a private, server-bound delegation when it calls the same internal application contracts, and that delegation is not a client credential or an OpenAPI authentication method.
+
+<Note>
+For OpenAPI integrations, select only the scopes required by the endpoints your integration calls.
+</Note>
+
+| Scope | Primary resources |
+| --- | --- |
+| `account:read` | Connector discovery, accounts, balances, positions, summaries, valuation history, and sync status. |
+| `account:write` | Account connections, Account tag replacement, and manual synchronization. Account name changes and deletion remain Web-only safety flows. |
+| `portfolio:read` | Portfolio definitions, aggregation reads, and valuation history. |
+| `portfolio:write` | Portfolio creation, updates, deletion, and membership. |
+| `order:read` | Current open orders and local terminal order history. |
+| `trade:read` | Fills and execution history. |
+| `ledger:read` | Ledger entries, including fees, rebates, funding, trades, and internal movements. |
+| `funding:read` | Read-only CEX deposit and withdrawal history. This does not authorize withdrawals. |
+| `marketdata:read` | Quotes and bounded OHLCV from a CEX already connected by the current user. |
+| `activity:write` | Start a bounded Plus or Pro activity-history import. The corresponding activity read scope is also required. |
+| `trade:write` | Protected order placement, cancellation, bulk cancellation, and native amendment. |
+| `transfer:write` | Protected internal transfers between account partitions in the same CEX. |
+
+New keys enable the nine core/read scopes by default. `activity:write`, `trade:write`, and `transfer:write` are off by default and must be selected deliberately. There is no `withdrawal:*` or `funding:write` scope.
+
+`activity:write` can only request a bounded provider-history import; it cannot place orders or move assets. Protected actions authorized by `trade:write` or `transfer:write` additionally require explicit confirmation, a current trading OTP, an `Idempotency-Key`, provider permission, subscription entitlement, and server-side risk checks.
+
+Requests made with a missing, inactive, expired, or insufficiently scoped key fail with a standard error envelope. All account, portfolio, and sync resources are confined to the authenticated key's user; a resource outside that ownership boundary returns `404 resource_not_found`.
+
+Connected CEX permissions are separate from Open API scopes. `requested_permissions` records the user's declaration and acts as an execution switch. A connector only marks a capability denied when it has reliable provider evidence; capabilities outside its `inspectable_permissions` remain unknown. Real-time read calls check `read` only, while a declared but unknown trade or transfer capability is left to the CEX for final verification.
+
+An account with `permission_status: partially_verified` has matching, explicit results for every capability listed in `inspectable_permissions`, but the exchange does not expose enough information to verify all four capabilities. Its `permission_issue_code` is `null`; treat it as an informational verification-coverage limitation, not as an invalid credential or a request to broaden the API key. `unverified` remains reserved for checks that have no usable inspector coverage or that fail to resolve a capability the connector claims it can inspect.
