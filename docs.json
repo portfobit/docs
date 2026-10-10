@@ -26,17 +26,12 @@
             "pages": [
               "guides/mcp-server-setup",
               "guides/mcp/codex",
+              "guides/mcp/claude-desktop",
               "guides/mcp/claude-code",
               "guides/mcp/cursor",
               "guides/mcp/openclaw",
               "guides/mcp/hermes",
               "guides/mcp/generic-client"
-            ]
-          },
-          {
-            "group": "MCP compatibility notes",
-            "pages": [
-              "guides/mcp/claude-desktop"
             ]
           },
           {

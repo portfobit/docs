@@ -3,7 +3,7 @@ title: Plugin or MCP Server Setup
 description: Install the Portfobit plugin or connect the MCP server to your AI agent.
 ---
 
-Portfobit uses a remote Model Context Protocol (MCP) server. Codex, Claude Code, Cursor, OpenClaw, and Hermes connect with browser-based OAuth, so you do not need to create or paste an API key first.
+Portfobit uses a remote Model Context Protocol (MCP) server. ChatGPT Desktop, Codex CLI, Claude Desktop, Claude Code, Cursor, OpenClaw, and Hermes connect with browser-based OAuth, so you do not need to create or paste an API key first.
 
 <Note>
 During OAuth authorization, review the requested scopes and keep write scopes off unless they are needed. `activity:write` starts bounded history imports; `trade:write` and `transfer:write` authorize protected actions subject to additional safeguards. Direct OpenAPI integrations should use only the scopes their endpoints require.
@@ -11,23 +11,35 @@ During OAuth authorization, review the requested scopes and keep write scopes of
 
 ## Choose a setup method
 
-Start from **Plugin or MCP Server Setup** on the Portfobit homepage. Codex and Claude Code offer plugin installation first; the manual MCP options support other clients and deployment environments.
+Start from **Plugin or MCP Server Setup** on the Portfobit homepage. The ChatGPT and Claude tabs offer plugin installation first; the manual MCP options support other clients and deployment environments.
 
-## Recommended for Codex and Claude Code: ask your agent to install the plugin
+## Recommended for ChatGPT and Claude: install the plugin
 
-Paste this into Codex or Claude Code, replacing the client name with the one you use:
+| Where you use it | How to install |
+| --- | --- |
+| ChatGPT Desktop (Chat or Codex mode) and Codex CLI | Paste the Codex prompt below. Install once to use it in all of them. |
+| Claude Code and Claude Desktop Code mode | Paste the Claude Code prompt below. |
+| Claude Desktop Chat/Cowork mode | Install manually from **Customize → Plugins**. See [Claude Desktop](/guides/mcp/claude-desktop). |
+
+ChatGPT or Codex:
 
 ```text
 Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Codex plugin marketplace, then guide me through Portfobit browser OAuth.
 ```
 
-For Claude Code, say `Claude Code plugin marketplace` in place of `Codex plugin marketplace`. The homepage's client tab provides the exact prompt for each agent. The existing manual Remote MCP method remains below.
+Claude Code or Claude Desktop Code mode:
+
+```text
+Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Claude Code plugin marketplace, then guide me through Portfobit browser OAuth.
+```
+
+The homepage's ChatGPT and Claude tabs show the same prompts and the Claude Desktop Chat/Cowork mode steps. The existing manual Remote MCP method remains below.
 
 ## Manual Remote MCP setup with OAuth
 
 Choose your client tab on the Portfobit homepage. Add the MCP URL without an `Authorization` header, run the login command, and choose the scopes you want to grant.
 
-For Codex:
+For Codex CLI:
 
 ```bash
 codex mcp add portfobit --url https://mcp.portfobit.com/v1/mcp
@@ -71,13 +83,12 @@ Developer API keys remain available for direct Open API integrations, CI, script
 
 ## Setup guides
 
-- [Codex](/guides/mcp/codex)
+- [ChatGPT & Codex](/guides/mcp/codex)
+- [Claude Desktop](/guides/mcp/claude-desktop)
 - [Claude Code](/guides/mcp/claude-code)
 - [Cursor](/guides/mcp/cursor)
 - [OpenClaw](/guides/mcp/openclaw)
 - [Hermes](/guides/mcp/hermes)
 - [Generic client](/guides/mcp/generic-client)
-
-For unverified Claude Desktop interoperability, see the separate [Claude Desktop note](/guides/mcp/claude-desktop).
 
 After setup, ask your agent: **“Use portfobit to list the account connectors I can connect.”** A successful response proves the MCP server can authenticate and reach Portfobit.

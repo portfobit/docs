@@ -1,18 +1,45 @@
 ---
 title: Claude Desktop
-description: Current Portfobit MCP interoperability guidance for Claude Desktop.
+description: Install the Portfobit plugin in Claude Desktop and sign in with browser-based OAuth.
 ---
 
-Portfobit supports browser-based OAuth for remote MCP clients. Direct Claude Desktop interoperability is not part of the currently verified setup template.
+Claude Desktop supports the Portfobit plugin in all of its modes. How you install it depends on the mode:
 
-## What to use now
+| Mode | Installation |
+| --- | --- |
+| Code | Ask Claude to install the plugin with a prompt. |
+| Chat/Cowork | Install the plugin manually. Chat/Cowork mode cannot install plugins from a prompt. |
 
-Use [Claude Code](/guides/mcp/claude-code) for the verified Claude integration. It adds the remote MCP URL and signs in through Portfobit's OAuth flow without copying an API key.
+You do not need to create or paste an API key.
 
-If your Claude Desktop release can add a custom remote OAuth MCP server, use this URL:
+## Code mode: install with a prompt
+
+Code mode runs Claude Code, so it uses the same prompt as [Claude Code](/guides/mcp/claude-code).
+
+1. Start a session in Code mode and paste:
 
 ```text
-https://mcp.portfobit.com/v1/mcp
+Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Claude Code plugin marketplace, then guide me through Portfobit browser OAuth.
 ```
 
-Do not add a static `Authorization` header to an OAuth connection.
+2. When Claude asks you to authorize, enter `/mcp`, select `portfobit`, and sign in to Portfobit in the browser. Choose only the scopes you want to grant.
+3. Start a new session in Code mode so the plugin and its connector load.
+4. Ask: **“Use portfobit to list the account connectors I can connect.”**
+
+## Chat/Cowork mode: install manually
+
+1. Open **Customize** from the Claude Desktop sidebar, then choose **Plugins**.
+2. Select **Add marketplace** and enter `https://github.com/portfobit/portfobit-plugin`.
+3. Select **Portfobit** from the plugin list, then select **Install**.
+
+Installing the plugin does not sign you in. Connect the connector separately:
+
+4. Open the Portfobit plugin and go to its **Connectors** tab.
+5. Connect `portfobit`. Your browser opens the Portfobit authorization page; choose only the scopes you want to grant.
+6. After authorization, you return to Claude and the connector shows as connected.
+7. Ask: **“Use portfobit to list the account connectors I can connect.”**
+
+## Notes
+
+- Do not add a static `Authorization` header to an OAuth connection.
+- Never paste an API key, exchange credential, OAuth token, or trading OTP into a chat.
