@@ -3,9 +3,28 @@ title: Cursor
 description: Connect Portfobit to Cursor with browser-based OAuth.
 ---
 
-Cursor connects to Portfobit's remote MCP server with browser-based OAuth.
+Cursor connects to Portfobit's remote MCP server with browser-based OAuth. You do not need to create or paste an API key.
 
-1. Add Portfobit to your project `.cursor/mcp.json` or global Cursor MCP configuration. Do not add an `Authorization` header:
+## Recommended: install the plugin with a prompt
+
+Paste this into the Cursor Agent chat:
+
+```text
+Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Cursor plugin marketplace, then guide me through Portfobit browser OAuth.
+```
+
+You can also install it from GitHub: open **Customize** in the Cursor sidebar, choose **From GitHub Repository**, enter `https://github.com/portfobit/portfobit-plugin`, then install Portfobit.
+
+Then sign in to Portfobit:
+
+- In the Cursor editor, open the MCP settings and connect `portfobit`.
+- In the Cursor CLI, start `agent`, run `/mcp`, and select Portfobit. Servers installed by the plugin are not available to `agent mcp login`.
+
+Sign in to Portfobit in the browser when asked, and choose only the scopes you want to grant.
+
+## Manual Remote MCP setup
+
+1. Add Portfobit to your project `.cursor/mcp.json` or global `~/.cursor/mcp.json`. Do not add an `Authorization` header:
 
 ```json
 {
@@ -17,13 +36,17 @@ Cursor connects to Portfobit's remote MCP server with browser-based OAuth.
 }
 ```
 
-2. Start the OAuth login:
+2. Sign in. In the Cursor editor, open the MCP settings and connect `portfobit`. With the Cursor CLI, run:
 
 ```bash
-cursor-agent mcp login portfobit
+agent mcp login portfobit
 ```
 
 3. Sign in to Portfobit in the browser and choose the scopes you want to grant.
 4. Ask: **“Use portfobit to list the account connectors I can connect.”**
 
-If an existing `portfobit` configuration has a static `Authorization` header, remove it before logging in with OAuth.
+If an existing `portfobit` configuration has a static `Authorization` header, remove it before logging in with OAuth. If you installed the plugin, do not also add a manual configuration; the two connections would show duplicate tools.
+
+<Note>
+OAuth sign-in is supported in the Cursor editor and CLI on your computer. Cursor Cloud Agents are not supported yet. Use a current Cursor version.
+</Note>
