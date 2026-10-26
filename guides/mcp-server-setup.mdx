@@ -6,7 +6,7 @@ description: Install the Portfobit plugin or connect the MCP server to your AI a
 Portfobit uses a remote Model Context Protocol (MCP) server. ChatGPT Desktop, Codex CLI, Claude Desktop, Claude Code, Cursor, OpenClaw, and Hermes connect with browser-based OAuth, so you do not need to create or paste an API key first.
 
 <Note>
-During OAuth authorization, review the requested scopes and keep write scopes off unless they are needed. `activity:write` starts bounded history imports; `trade:write` and `transfer:write` authorize protected actions subject to additional safeguards. Direct OpenAPI integrations should use only the scopes their endpoints require.
+During OAuth authorization, review and keep the default permission selection for the standard account, portfolio, order, activity, and market-data workflows. The optional `activity:write`, `trade:write`, and `transfer:write` scopes are off by default; enable them only when needed. `activity:write` starts bounded history imports; `trade:write` and `transfer:write` authorize protected actions subject to additional safeguards. Direct OpenAPI integrations should use only the scopes their endpoints require.
 </Note>
 
 ## Choose a setup method
