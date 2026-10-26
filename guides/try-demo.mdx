@@ -1,0 +1,105 @@
+---
+title: Live Demo
+description: Try Portfobit with real exchange accounts and real funds, connected through read-only API keys. No personal exchange API keys required.
+---
+
+Connect your AI agent to Portfobit's shared demo account and explore real crypto
+portfolio data. The exchange accounts are already connected and hold real funds,
+so you can analyze actual balances, asset exposure, and any open positions.
+You do not need to register a Portfobit account or provide your own exchange API keys.
+
+## Demo login
+
+Open [portfobit.com](https://portfobit.com) and sign in with these public demo credentials:
+
+| Field | Value |
+| --- | --- |
+| Email | `engineering@portfobit.com` |
+| Password | `LBYqigByEJZ9YHzrc3C3` |
+
+These credentials are intentionally shared for this demo. Enter them in the
+Portfobit browser sign-in form when asked to sign in, including during MCP OAuth
+authorization.
+
+<Note>
+The connected exchange API keys have **read-only permissions**. You can query and
+analyze real account data; those keys cannot place, cancel, or amend orders, or
+transfer funds. The demo login above is a Portfobit login, not an exchange login
+or an exchange API key.
+
+We're happy to open this demo to everyone, even though the connected exchange
+accounts hold real funds, because their exchange API keys grant read access only,
+with no trading or transfer permissions. This demonstrates the security benefit
+of read-only access. You can use the same [read-only setup](/guides/security) when
+connecting your own exchange accounts.
+</Note>
+
+## Try it with your AI agent
+
+<Steps>
+  <Step title="Connect your AI agent">
+    Follow the [Plugin or MCP Server Setup](/guides/mcp-server-setup) guide for your
+    preferred client. It covers ChatGPT & Codex, Claude, Cursor, OpenClaw, Hermes,
+    and other compatible MCP clients.
+
+    Use the browser-based OAuth path. You do not need to create a Developer API key
+    or add an exchange connection for this demo.
+  </Step>
+
+  <Step title="Authorize the demo account">
+    When your client opens the Portfobit authorization page, sign in with the demo
+    credentials above. If you are already signed in to your own Portfobit account,
+    sign out before starting the demo authorization so you connect the demo account.
+
+    Keep the default permission selection so you can explore accounts, portfolios,
+    orders, activity history, and market data. No additional trading or
+    internal-transfer permissions are needed for this demo. Approve the
+    authorization and return to your AI client.
+  </Step>
+
+  <Step title="Ask about the real portfolio">
+    Copy one of the prompts below into your AI conversation. The exchange accounts
+    are already connected; start by reading their existing data.
+  </Step>
+</Steps>
+
+### Check balances
+
+```text
+Use Portfobit to list the connected accounts and summarize their balances and total portfolio value. Include the latest synchronization time and flag any accounts whose data is unavailable or stale.
+```
+
+### Explore asset exposure
+
+```text
+Use Portfobit to show the largest asset exposures across the connected accounts. Compare BTC, ETH, and stablecoin holdings where available, and explain any concentration in the portfolio.
+```
+
+### Analyze open positions
+
+```text
+Use Portfobit to list any open positions and summarize their direction, size, unrealized P&L, and available risk indicators. If there are no open positions, say so. Use read-only queries and include the data timestamps.
+```
+
+## What to expect
+
+- **Real accounts and funds.** You are querying actual exchange account data
+  through Portfobit and MCP.
+- **Changing data.** Balances, prices, and positions can change. Responses reflect
+  the latest available synchronized data; ask for timestamps when comparing results.
+  See [Sync and Data Freshness](/guides/sync-and-data-freshness).
+- **A shared experience.** Everyone uses the same demo account. Use it to explore
+  the existing connections and data; use your own Portfobit account for personal
+  exchange connections and settings.
+- **Read-only exchange access.** This demo demonstrates portfolio queries and
+  analysis. Portfobit's protected trading features require separately enabled
+  permissions, explicit user confirmation, and a trading OTP. See
+  [Security](/guides/security) for the full requirements.
+
+## Connect your own exchange account
+
+Sign out of the demo account, then sign in to or create your own Portfobit account.
+Authorize your AI client with that account and follow
+[Connect Your First Account](/guides/connect-your-first-account).
+For more questions to ask your agent, see
+[Use Portfobit with AI](/guides/use-portfobit-with-ai).

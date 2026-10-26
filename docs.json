@@ -18,7 +18,8 @@
           {
             "group": "Getting started",
             "pages": [
-              "guides/get-started"
+              "guides/get-started",
+              "guides/try-demo"
             ]
           },
           {
