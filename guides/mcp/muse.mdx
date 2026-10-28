@@ -1,0 +1,41 @@
+---
+title: Muse
+description: Let Muse set up Portfobit, guide browser OAuth, and connect your first exchange account.
+---
+
+Use this guide to connect Muse to Portfobit through a Remote MCP Custom Connector and continue through to your first exchange account.
+
+## Recommended: Set up Portfobit with a prompt
+
+Paste this into Muse:
+
+```text
+Connect Muse to Portfobit using https://docs.portfobit.com/guides/mcp/muse. Configure a Remote MCP connector with browser OAuth. Guide me through signing in to https://portfobit.com and browser OAuth with the permissions I choose, then help me connect my first exchange account using https://docs.portfobit.com/guides/connect-your-first-account. Explain the credential-entry options before asking for exchange keys.
+```
+
+## 1. Set up the MCP connection
+
+Ask Muse to create a Custom Connector using Remote MCP with these settings:
+
+| Setting | Value |
+| --- | --- |
+| Name | `portfobit` |
+| URL | `https://mcp.portfobit.com/v1/mcp` |
+| Authorization | Browser OAuth |
+
+Use the controls available in the user's Muse version. If it cannot configure Remote MCP with OAuth, explain that limitation rather than substituting a Portfobit Developer API Key or claiming setup succeeded.
+
+## 2. Sign in and authorize
+
+1. Open [Portfobit](https://portfobit.com) and sign in, or create your account.
+2. Start the Portfobit connection from Muse and follow browser OAuth.
+3. Let the user choose the scopes on Portfobit's authorization page and approve access.
+4. Return to Muse and call `get_current_user_context` or `list_account_connectors` to check the connection.
+
+The OAuth path does not require creating a key in Portfobit's **API Keys** page. If the user wants Muse to create an exchange account connection through MCP, it needs `account:write`; the website's Add Account flow is also available. Do not silently change the user's chosen access.
+
+## 3. Connect the first exchange account
+
+Follow [Connect Your First Account](/guides/connect-your-first-account). Discover the chosen exchange connector, explain its API-key creation steps, let the user choose AI-assisted or website credential entry, and complete the connection.
+
+Check the first sync and show the available account data. Report success only after Portfobit confirms the account and its sync result.

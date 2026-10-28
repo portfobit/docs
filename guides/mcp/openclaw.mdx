@@ -5,6 +5,22 @@ description: Connect Portfobit to OpenClaw with browser-based OAuth.
 
 OpenClaw connects to Portfobit's Streamable HTTP MCP server with browser-based OAuth.
 
+## Recommended: Install the Portfobit plugin
+
+Paste this into OpenClaw:
+
+```text
+Install the Portfobit plugin in OpenClaw from https://github.com/portfobit/portfobit-plugin, following https://docs.portfobit.com/guides/mcp/openclaw. Use its compatible skills and Remote MCP connection, guide me through browser authorization and permissions, then verify the connection with a read-only account query. Preserve existing MCP settings and never request credentials in chat. Then help me connect my first exchange account using https://docs.portfobit.com/guides/connect-your-first-account.
+```
+
+Use an OpenClaw release with compatible plugin bundles and Streamable HTTP MCP support. The plugin contains five shared Skills and one Remote MCP connection. Complete the host's installation or enablement confirmation, then sign in to Portfobit in your browser. On the OAuth authorization page, choose the access you need and approve the connection.
+
+Ask **“Use portfobit to list the account connectors I can connect.”** to check the connection. Installing the plugin does not grant account access by itself. See the [plugin installation guide](https://github.com/portfobit/portfobit-plugin/blob/main/docs/install/openclaw.md) for enablement, conflicts and uninstall steps.
+
+OpenClaw can map compatible Agent Plugins, Cursor or Claude bundles. Inspect the installed bundle and check that the Skills and one `portfobit` MCP connection are enabled. Avoid duplicate plugin and manually configured connections.
+
+The manual methods below remain available. For remote or headless deployments, use the dedicated Bearer instructions rather than expecting a local browser callback to reach a remote gateway.
+
 ## Local interactive install: OAuth
 
 1. Add Portfobit with OAuth authentication:

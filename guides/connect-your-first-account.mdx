@@ -1,42 +1,75 @@
 ---
 title: Connect Your First Account
-description: Use your AI agent to add a crypto CEX account.
+description: Let your AI guide exchange API-key creation, account connection, and the first sync.
 ---
 
-The recommended path is to let the connected AI agent create the account connection through MCP. Portfobit will automatically enqueue the first `on_create` synchronization after creation.
+Once your agent is connected to Portfobit through OAuth, ask it to help connect your first exchange account. The agent can discover the connector, explain the exchange's API settings, create the connection through MCP, and check the result.
 
-## Add the Portfobit IP allowlist first
+## 1. Choose the exchange and how to enter credentials
 
-Before creating the provider API credential, ask the agent:
+Tell the agent which exchange you use and what to name the account. It should call `list_account_connectors`, select the matching connector and read its required credential fields rather than guessing them.
 
-> **Use portfobit to list the current service egress IPs for my provider IP allowlist.**
+Choose one of these credential-entry methods:
 
-Copy every returned active IP address into the CEX API-key IP allowlist. Do this before creating or enabling the credential whenever the CEX supports an IP allowlist. It restricts provider API access to Portfobit's service network and prevents a common first-sync failure.
+| Method | What happens |
+| --- | --- |
+| **AI-assisted connection through MCP** | The agent calls `create_account_connection` with the exchange credentials. This needs `account:write` in the OAuth grant. Credentials passed through chat or tool arguments may be processed by the model and retained by the host, depending on its policies. Choose this only if you accept that exposure. |
+| **Website entry for stronger credential isolation** | Sign in to [Portfobit](https://portfobit.com), open **Dashboard → Accounts → Add Account**, and enter the exchange credentials directly in the form. This keeps them out of the agent conversation and MCP tool arguments. The agent can guide the setup and query the account afterward. |
 
-<Note>
-Use the current IPs returned by the agent, not a copied list from a document or an old conversation. Portfobit can rotate egress IPs; use the same check whenever you create a new provider credential or update its allowlist.
-</Note>
+An exchange IP allowlist limits where a key can be used and reduces misuse risk, but it does not make a disclosed key harmless. For stronger protection against model or host exposure, use website entry. Never put login passwords, authenticator codes or recovery codes in the agent conversation.
 
-## Prepare the provider credential
+## 2. Create the API key at your exchange
 
-1. Ask the agent to list supported account connectors and choose one.
-2. In the CEX, create an API credential and add the current Portfobit egress IPs to its allowlist.
-3. For analysis, enable only read permission. Enable trading or internal-transfer permission only when you deliberately plan to use the protected-action flow; always disable withdrawals and any external-transfer permission.
+**Most exchanges:** choose a **System-generated / HMAC** API key, which provides an API key and an API secret. Use this option rather than self-generated RSA or Ed25519 keys when the exchange offers that choice.
 
-## Ask the AI agent to connect the account
+**Coinbase uses a different key format.** Portfobit's Coinbase connector uses Advanced Trade / CDP credentials. Choose **ECDSA (P-256 / ES256)**, enter the full CDP key name (`organizations/.../apiKeys/...`) as the API key, and paste the complete PEM private key as the API secret, including its BEGIN and END markers. These are different from legacy Coinbase Exchange HMAC credentials. See the [Coinbase key guide](https://docs.cdp.coinbase.com/coinbase-app/authentication-authorization/api-key-authentication).
 
-Give the agent a direct instruction, for example:
+1. Open the exchange's official app or website and sign in to the intended main account or sub-account.
+2. Look under your profile, account settings or services for **API Management**, **API** or **API Keys**, then choose **Create API Key**. If the app has no such option, use the official website.
+3. Give the key a recognizable name, such as `Portfobit`.
+4. Select the appropriate key type described above and follow the selected connector's required credential fields.
+5. Select permissions for what you want Portfobit to do, configure any IP restrictions, and complete the exchange's own security verification.
+6. Store the API key and secret securely. If the exchange requires an API passphrase, keep that too; it is the API passphrase you created, not your exchange login password. Some secrets are shown only once.
 
-> List Portfobit account connectors, then help me add my Binance account named `Long-term`. I need read-only analysis access. Tell me which credential fields are required before I provide them.
+Examples from exchange documentation:
 
-The agent should discover the connector first, collect only the provider-required fields, create the connection, and report the returned synchronization reference.
+| Exchange | Where to start |
+| --- | --- |
+| Binance | In the app's Pro view, open **More → Other → API Management → Create API** and choose **System-generated (HMAC)**. [Official guide](https://www.binance.com/en/support/faq/detail/360002502072) |
+| OKX | In the app, open **Menu → API → Create API key**, or use **Profile → API and connections** on the website. Save the API passphrase. [Official guide](https://www.okx.com/en-us/help/api-faq-eea) |
+| Bybit | Use the website's **API Management** page; its guide directs key creation to the website rather than the app. [Official guide](https://www.bybit.com/en/help-center/article/How-to-create-your-API-key) |
 
-## Confirm the first sync
+### Choose permissions deliberately
 
-Creation queues an `on_create` sync; it does not prove that the provider accepted the credentials. Ask the agent to check the returned sync status and account status. A successful result should show that Portfobit can retrieve the account snapshot.
+- Enable the reading permissions needed for balances, positions and account history.
+- Enable trading or same-exchange internal-transfer permissions only if you want those capabilities. Portfobit's protected actions still require the necessary OAuth scopes, explicit confirmation and trading OTP authorization through a supported private input path.
+- Keep **Withdraw**, external-address transfers and other unrelated permissions disabled. Do not grant broad permissions just to clear a setup error. Portfobit never supports withdrawals, external transfers, cross-exchange transfers or P2P transfers.
 
-If the first sync fails, correct the provider credential or IP allowlist and retry after reviewing [Troubleshooting](/guides/troubleshooting).
+### Decide whether to bind IP addresses
 
-## Alternative: connect in Portfobit Web
+For a read-only key, IP binding is optional **when the exchange allows it**; you can still enable it for stronger protection. Trading permissions may require IP restrictions. For example, Binance's unrestricted HMAC keys are limited to reading under its default controls. Follow the exchange's current requirements without disabling its security controls.
 
-You can add the same account from Portfobit Web. This is the better option when you do not want an AI client to receive the provider credential. Web account creation also automatically starts an `on_create` sync.
+When IP binding is required or you choose to use it, get the current Portfobit service IPs through either setup path:
+
+- **Using the website:** open **Dashboard → Accounts → Add Account**. The **IP Whitelist** section displays the current IP addresses; use **Copy IPs** to copy them for your exchange API key's allowlist.
+- **Using your AI agent:** ask:
+
+> Use portfobit to list the current service egress IPs for my exchange API allowlist.
+
+The agent calls `list_service_egress_ips`. Whichever path you use, add all current active Portfobit IPs to the exchange key's allowlist. Use these service IPs rather than your device's IP or the agent host's IP, and check the current list whenever configuring a new key or changing restrictions.
+
+## 3. Connect the account
+
+For AI-assisted entry, first agree to the credential visibility described above. Let the agent collect only the selected connector's required fields, then call `create_account_connection` with the name, connector and permissions you chose. Never enable withdrawal permission. If the OAuth grant lacks `account:write`, choose whether to authorize it or use website entry instead.
+
+For website entry, fill **Dashboard → Accounts → Add Account** yourself, select the matching exchange, enter the key, secret and any required passphrase, set the permissions to match the exchange key, and submit. You do not need to send the credentials back to the agent.
+
+You can start with:
+
+> Help me connect my Binance account as `Long-term`. Discover the connector, guide me through API Management and the permissions and IP settings, explain MCP versus website credential entry, then check the connection and first sync.
+
+## 4. Check the first sync
+
+Account creation starts the first sync automatically. Ask the agent to check the returned sync and account status, then show the available balances or positions. Creating a connection alone does not prove that the exchange accepted the credentials.
+
+If it fails, check the key type, account or sub-account, permissions, required passphrase and any IP restrictions. Correct the connection before retrying; use [Troubleshooting](/guides/troubleshooting) for the reported error. Do not create a second connection simply because a response was delayed.

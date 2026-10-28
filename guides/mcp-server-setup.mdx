@@ -3,44 +3,73 @@ title: Plugin or MCP Server Setup
 description: Install the Portfobit plugin or connect the MCP server to your AI agent.
 ---
 
-Portfobit uses a remote Model Context Protocol (MCP) server. ChatGPT Desktop, Codex CLI, Claude Desktop, Claude Code, Cursor, OpenClaw, and Hermes connect with browser-based OAuth, so you do not need to create or paste an API key first.
+Agents connect through Portfobit's remote Model Context Protocol (MCP) server and browser OAuth. The Grok Bot and Muse guides take the agent through installation, website sign-in, OAuth and the first exchange account connection.
 
 <Note>
-During OAuth authorization, review and keep the default permission selection for the standard account, portfolio, order, activity, and market-data workflows. The optional `activity:write`, `trade:write`, and `transfer:write` scopes are off by default; enable them only when needed. `activity:write` starts bounded history imports; `trade:write` and `transfer:write` authorize protected actions subject to additional safeguards. Direct OpenAPI integrations should use only the scopes their endpoints require.
+During OAuth authorization, review the available permissions and choose the access you want to grant. The optional `activity:write`, `trade:write`, and `transfer:write` scopes are off by default; enable them only when needed. `activity:write` starts bounded history imports; `trade:write` and `transfer:write` authorize protected actions subject to additional safeguards. Direct OpenAPI integrations should use only the scopes their endpoints require.
 </Note>
 
 ## Choose a setup method
 
-Start from **Plugin or MCP Server Setup** on the Portfobit homepage. The ChatGPT, Claude, and Cursor tabs offer plugin installation first; the manual MCP options support other clients and deployment environments.
+Use the homepage tabs in this order: **GrokBot, Muse, Hermes, OpenClaw, ChatGPT, Claude, Cursor, Generic**. If the row runs out of space, open **More** to see every agent. The selected agent remains visible.
 
-## Recommended for ChatGPT, Claude, and Cursor: install the plugin
+## Recommended installation
 
-| Where you use it | How to install |
+| Where you use it | How to connect |
 | --- | --- |
+| [Grok Bot](/guides/mcp/grok-bot) | Ask it to install the GitHub plugin; custom Remote HTTPS MCP is also available. |
+| [Muse](/guides/mcp/muse) | Paste the Muse prompt below to configure a Remote MCP Custom Connector and complete browser OAuth. |
+| [Hermes](/guides/mcp/hermes) | Ask it to install and enable the portable plugin, then connect MCP. |
+| [OpenClaw](/guides/mcp/openclaw) | Ask it to install a compatible plugin bundle, then connect MCP. |
 | ChatGPT Desktop (Chat or Codex mode) and Codex CLI | Paste the Codex prompt below. Install once to use it in all of them. |
 | Claude Code and Claude Desktop Code mode | Paste the Claude Code prompt below. |
 | Claude Desktop Chat/Cowork mode | Install manually from **Customize → Plugins**. See [Claude Desktop](/guides/mcp/claude-desktop). |
-| Cursor | Paste the Cursor prompt below into the Cursor Agent chat, or add the plugin repository from **Customize → From GitHub Repository**. See [Cursor](/guides/mcp/cursor). |
+| Cursor | Paste the Cursor prompt below or use **Customize → From GitHub Repository**. See [Cursor](/guides/mcp/cursor). |
+| [Generic](/guides/mcp/generic-client) | Use manual MCP and a scoped Developer API Key. |
+
+Grok Bot:
+
+```text
+Set up Portfobit in Grok Bot using https://docs.portfobit.com/guides/mcp/grok-bot. Prefer the plugin from https://github.com/portfobit/portfobit-plugin; otherwise use Remote MCP. Guide me through signing in to https://portfobit.com and browser OAuth with the permissions I choose, then help me connect my first exchange account using https://docs.portfobit.com/guides/connect-your-first-account. Explain the credential-entry options before asking for exchange keys.
+```
+
+Muse:
+
+```text
+Connect Muse to Portfobit using https://docs.portfobit.com/guides/mcp/muse. Configure a Remote MCP connector with browser OAuth. Guide me through signing in to https://portfobit.com and browser OAuth with the permissions I choose, then help me connect my first exchange account using https://docs.portfobit.com/guides/connect-your-first-account. Explain the credential-entry options before asking for exchange keys.
+```
+
+Hermes:
+
+```text
+Install and enable the Portfobit plugin in Hermes from https://github.com/portfobit/portfobit-plugin, following https://docs.portfobit.com/guides/mcp/hermes. Use its shared skills and Remote MCP connection, guide me through browser authorization and permissions, then verify the connection with a read-only account query. Preserve existing MCP settings and never request credentials in chat. Then help me connect my first exchange account using https://docs.portfobit.com/guides/connect-your-first-account.
+```
+
+OpenClaw:
+
+```text
+Install the Portfobit plugin in OpenClaw from https://github.com/portfobit/portfobit-plugin, following https://docs.portfobit.com/guides/mcp/openclaw. Use its compatible skills and Remote MCP connection, guide me through browser authorization and permissions, then verify the connection with a read-only account query. Preserve existing MCP settings and never request credentials in chat. Then help me connect my first exchange account using https://docs.portfobit.com/guides/connect-your-first-account.
+```
 
 ChatGPT or Codex:
 
 ```text
-Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Codex plugin marketplace, then guide me through Portfobit browser OAuth.
+Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Codex plugin marketplace, then guide me through Portfobit browser OAuth. Then help me connect my first exchange account using https://docs.portfobit.com/guides/connect-your-first-account.
 ```
 
 Claude Code or Claude Desktop Code mode:
 
 ```text
-Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Claude Code plugin marketplace, then guide me through Portfobit browser OAuth.
+Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Claude Code plugin marketplace, then guide me through Portfobit browser OAuth. Then help me connect my first exchange account using https://docs.portfobit.com/guides/connect-your-first-account.
 ```
 
 Cursor:
 
 ```text
-Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Cursor plugin marketplace, then guide me through Portfobit browser OAuth.
+Install the Portfobit plugin from https://github.com/portfobit/portfobit-plugin using the Cursor plugin marketplace, then guide me through Portfobit browser OAuth. Then help me connect my first exchange account using https://docs.portfobit.com/guides/connect-your-first-account.
 ```
 
-The homepage's ChatGPT, Claude, and Cursor tabs show the same prompts and the Claude Desktop Chat/Cowork mode steps. The existing manual Remote MCP method remains below.
+The homepage shows the same host-specific prompts. Manual Remote MCP remains below the plugin cards; Muse uses its own Custom Connector guidance. Claude Desktop Chat/Cowork keeps its manual installation steps.
 
 ## Manual Remote MCP setup with OAuth
 
@@ -53,14 +82,14 @@ codex mcp add portfobit --url https://mcp.portfobit.com/v1/mcp
 codex mcp login portfobit
 ```
 
-The other verified clients use the same browser authorization flow. OpenClaw and Hermes also have a Bearer fallback for remote or headless deployments where the loopback callback cannot reach the running Agent.
+The other OAuth-capable clients use the same browser authorization flow. OpenClaw and Hermes also have a Bearer fallback for remote or headless deployments where the loopback callback cannot reach the running Agent.
 
 | Client | Add or configure | Sign in |
 | --- | --- | --- |
+| Hermes | `hermes mcp add --url https://mcp.portfobit.com/v1/mcp --auth oauth portfobit` | `hermes mcp login portfobit` |
+| OpenClaw | `openclaw mcp set portfobit '{"url":"https://mcp.portfobit.com/v1/mcp","transport":"streamable-http","auth":"oauth"}'` | `openclaw mcp login portfobit` |
 | Claude Code | `claude mcp add --scope user --transport http portfobit https://mcp.portfobit.com/v1/mcp` | `claude mcp login portfobit` |
 | Cursor | Add the URL in `mcp.json` | `agent mcp login portfobit` |
-| OpenClaw | `openclaw mcp set portfobit '{"url":"https://mcp.portfobit.com/v1/mcp","transport":"streamable-http","auth":"oauth"}'` | `openclaw mcp login portfobit` |
-| Hermes | `hermes mcp add --url https://mcp.portfobit.com/v1/mcp --auth oauth portfobit` | `hermes mcp login portfobit` |
 
 Do not add a static `Authorization` header to an OAuth connection; clients commonly prioritize that header instead of starting OAuth.
 
@@ -90,12 +119,14 @@ Developer API keys remain available for direct Open API integrations, CI, script
 
 ## Setup guides
 
+- [Grok Bot](/guides/mcp/grok-bot)
+- [Muse](/guides/mcp/muse)
+- [Hermes](/guides/mcp/hermes)
+- [OpenClaw](/guides/mcp/openclaw)
 - [ChatGPT & Codex](/guides/mcp/codex)
 - [Claude Desktop](/guides/mcp/claude-desktop)
 - [Claude Code](/guides/mcp/claude-code)
 - [Cursor](/guides/mcp/cursor)
-- [OpenClaw](/guides/mcp/openclaw)
-- [Hermes](/guides/mcp/hermes)
 - [Generic client](/guides/mcp/generic-client)
 
 After setup, ask your agent: **“Use portfobit to list the account connectors I can connect.”** A successful response proves the MCP server can authenticate and reach Portfobit.

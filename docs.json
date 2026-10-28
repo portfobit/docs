@@ -26,12 +26,14 @@
             "group": "Plugin or MCP Server Setup",
             "pages": [
               "guides/mcp-server-setup",
+              "guides/mcp/grok-bot",
+              "guides/mcp/muse",
+              "guides/mcp/hermes",
+              "guides/mcp/openclaw",
               "guides/mcp/codex",
               "guides/mcp/claude-desktop",
               "guides/mcp/claude-code",
               "guides/mcp/cursor",
-              "guides/mcp/openclaw",
-              "guides/mcp/hermes",
               "guides/mcp/generic-client"
             ]
           },

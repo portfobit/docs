@@ -1,0 +1,43 @@
+---
+title: Grok Bot
+description: Let Grok Bot install Portfobit, complete OAuth, and connect your first exchange account.
+---
+
+Use this guide to set up Portfobit in Grok Bot and continue through to your first connected exchange account.
+
+## Recommended: Install the Portfobit plugin
+
+Paste this into Grok Bot:
+
+```text
+Set up Portfobit in Grok Bot using https://docs.portfobit.com/guides/mcp/grok-bot. Prefer the plugin from https://github.com/portfobit/portfobit-plugin; otherwise use Remote MCP. Guide me through signing in to https://portfobit.com and browser OAuth with the permissions I choose, then help me connect my first exchange account using https://docs.portfobit.com/guides/connect-your-first-account. Explain the credential-entry options before asking for exchange keys.
+```
+
+## 1. Install the plugin, or add Remote MCP
+
+Ask Grok Bot to install the [Portfobit plugin](https://github.com/portfobit/portfobit-plugin). The repository includes Cursor-compatible plugin metadata, shared Skills and the Remote MCP connection. Use Grok Bot's supported plugin installer and complete any installation confirmation it requests.
+
+If plugin installation is unavailable, add a custom MCP server using **Remote HTTPS**:
+
+| Setting | Value |
+| --- | --- |
+| Name | `portfobit` |
+| URL | `https://mcp.portfobit.com/v1/mcp` |
+| Authorization | Browser OAuth |
+
+Keep an existing working connection rather than adding a duplicate. This OAuth setup does not require creating a Portfobit Developer API Key or adding a static Authorization header.
+
+## 2. Sign in and authorize
+
+1. Open [Portfobit](https://portfobit.com) and sign in, or create your account.
+2. In Grok Bot, connect the plugin's Portfobit MCP server or the custom server added above.
+3. Follow browser OAuth. On Portfobit's authorization page, let the user choose the scopes and approve access.
+4. Return to Grok Bot and call `get_current_user_context` or `list_account_connectors` to confirm the connection.
+
+If the user wants the agent to create an exchange account connection, it needs `account:write`. Otherwise, the user can add the account on the website. Do not silently expand an existing authorization.
+
+## 3. Connect the first exchange account
+
+Continue with [Connect Your First Account](/guides/connect-your-first-account). Ask which exchange and account name the user wants, discover its connector, explain how to create its exchange API key, and help finish the connection using the user's chosen credential-entry method.
+
+Finish by checking the first sync and showing the connected account's available balances or positions. Installing the plugin and completing OAuth alone do not connect an exchange account.
